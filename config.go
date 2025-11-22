@@ -25,11 +25,15 @@ const (
 	FCodeApiKeyFile = "key.toml"
 	IdeName         = "vim"
 	PluginVersion   = "0.2.1"
+	DefaultCursor   = "<CURSOR>"
+	DefaultPort     = 8123
 )
 
 type Conf struct {
 	UserName string `toml:"username"`
 	Password string `toml:"password"`
+	Cursor   string `toml:"cursor"`
+	Port     int    `toml:"port"`
 }
 
 func (c *Conf) getPath() string {
@@ -43,6 +47,20 @@ func (c *Conf) load() {
 	if len(content) > 0 {
 		_ = toml.Unmarshal(content, c)
 	}
+}
+
+func (c *Conf) GetCursor() string {
+	if c.Cursor != "" {
+		return c.Cursor
+	}
+	return DefaultCursor
+}
+
+func (c *Conf) GetPort() int {
+	if c.Port > 0 {
+		return c.Port
+	}
+	return DefaultPort
 }
 
 type Key struct {
