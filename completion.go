@@ -72,8 +72,6 @@ func handleCompletions(c *gin.Context, body *bytes.Buffer) {
 	}
 
 	payloadJSON, _ := json.Marshal(payload)
-	p := "/Users/moqsien/projects/go/src/fcode/payload.json"
-	os.WriteFile(p, payloadJSON, os.ModePerm)
 
 	url := fmt.Sprintf("%s/%s?ide=%s&v=%s", completionURL, DefaultKey.APIKey, IdeName, PluginVersion)
 	resp, err := http.Post(url, "application/json", bytes.NewReader(payloadJSON))
