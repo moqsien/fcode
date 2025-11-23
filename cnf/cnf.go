@@ -17,7 +17,7 @@ func init() {
 	DefaultConf = &Conf{}
 	DefaultConf.load()
 	if len(DefaultConf.AIModels) > 0 {
-		DefaultModel = DefaultConf.AIModels[0]
+		DefaultModel = DefaultConf.AIModels[1]
 	}
 }
 
