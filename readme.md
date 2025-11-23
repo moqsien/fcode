@@ -1,5 +1,5 @@
 ## 什么是fcode？
-- fcode是为lsp-ai项目做的一个adapter，支持fitten code，以及其他兼容OpenAI接口的大模型API。例如，美团的LongCat，阿里的ModelScope(qwen)，OpenAI等等。
+- fcode是为[lsp-ai](https://github.com/SilasMarvin/lsp-ai)项目做的一个adapter，支持fitten code，以及其他兼容OpenAI接口的大模型API。例如，美团的LongCat，阿里的ModelScope(qwen)，OpenAI等等。
 
 ## fcode带来什么好处？
 - 原本不支持lsp-ai的fitten code可以在lsp-ai中使用。
@@ -15,7 +15,7 @@ touch conf.toml
 ```
 
 ## 配置lsp-ai
-- 以helix editor为例
+- 以[helix editor](https://github.com/helix-editor/helix)为例
 ```text
 # 见conf_example/helix_languages.toml
 ```
