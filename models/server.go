@@ -10,6 +10,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var (
+	sig = make(chan struct{})
+)
+
 func Serve() {
 	r := gin.Default()
 
@@ -26,7 +30,7 @@ func Serve() {
 	})
 
 	r.POST("/v1/choose/model", func(ctx *gin.Context) {
-		name := ctx.Query("model")
+		name := ctx.Query("name")
 
 		found := false
 		for _, mm := range cnf.DefaultConf.AIModels {
@@ -45,5 +49,12 @@ func Serve() {
 		}
 	})
 
-	r.Run(cnf.DefaultConf.GetPort())
+	r.POST("/v1/stop", func(ctx *gin.Context) {
+		sig <- struct{}{}
+	})
+
+	go func() {
+		r.Run(cnf.DefaultConf.GetPort())
+	}()
+	<-sig
 }

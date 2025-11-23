@@ -1,7 +1,9 @@
 package main
 
-import "fcode/models"
+import (
+	"fcode/cmd"
+)
 
 func main() {
-	models.Serve()
+	cmd.Run()
 }
