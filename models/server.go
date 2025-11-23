@@ -1,9 +1,9 @@
 package models
 
 import (
-	"fcode/cnf"
-	"fcode/models/fitten"
-	"fcode/models/openai"
+	"github.com/moqsien/fcode/cnf"
+	"github.com/moqsien/fcode/models/fitten"
+	"github.com/moqsien/fcode/models/openai"
 	"net/http"
 	"strings"
 

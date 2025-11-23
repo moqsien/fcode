@@ -3,8 +3,8 @@ package fitten
 import (
 	"bytes"
 	"encoding/json"
-	"fcode/cnf"
 	"fmt"
+	"github.com/moqsien/fcode/cnf"
 	"io"
 	"net/http"
 	"os"

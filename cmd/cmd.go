@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"fcode/cnf"
-	"fcode/models"
 	"fmt"
+	"github.com/moqsien/fcode/cnf"
+	"github.com/moqsien/fcode/models"
 	"io"
 	"net/http"
 

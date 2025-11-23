@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fcode/cmd"
+	"github.com/moqsien/fcode/cmd"
 )
 
 func main() {
