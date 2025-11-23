@@ -20,7 +20,7 @@ type CompletionResponse struct {
 	GeneratedText string `json:"generated_text"`
 }
 
-type Response struct {
+type CompResponse struct {
 	Choices []Choice `json:"choices"`
 }
 
@@ -37,4 +37,8 @@ type Message struct {
 	ReasoningDetails *string `json:"reasoning_details"`
 	Role             string  `json:"role"`
 	TaskID           *string `json:"task_id"`
+}
+
+type FCodeDelta struct {
+	Delta string `json:"delta"`
 }

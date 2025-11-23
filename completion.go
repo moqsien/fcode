@@ -90,7 +90,7 @@ func handleCompletions(c *gin.Context, body *bytes.Buffer) {
 	comp := strings.ReplaceAll(r.GeneratedText, "<.endoftext.>", "")
 	comp = strings.ReplaceAll(comp, `<|endoftext|>`, "")
 
-	lspAIResp := &Response{
+	lspAIResp := &CompResponse{
 		[]Choice{
 			{
 				FinishReason: "stop",
