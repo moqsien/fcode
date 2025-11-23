@@ -1,0 +1,29 @@
+cursor = '<CURSOR>'
+port = 8123
+
+[[models]]
+name = 'fitten_code'
+type = 'open_ai'
+api = ''
+model = ''
+key = ''
+username = 'xxxxxx'
+password = 'xxxxxx'
+
+[[models]]
+name = 'longcat'
+type = 'open_ai'
+api = 'https://api.longcat.chat/openai/v1/chat/completions'
+model = 'LongCat-Flash-Chat'
+key = 'xxxxxx'
+username = ''
+password = ''
+
+[[models]]
+name = 'qwen'
+type = 'open_ai'
+api = 'https://api-inference.modelscope.cn/v1/chat/completions'
+model = 'Qwen/Qwen3-Coder-480B-A35B-Instruct'
+key = 'xxxxxx'
+username = ''
+password = ''
