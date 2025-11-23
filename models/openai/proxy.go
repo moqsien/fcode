@@ -3,6 +3,7 @@ package openai
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fcode/cnf"
 	"fmt"
 	"io"
@@ -43,6 +44,7 @@ func HandleAll(c *gin.Context) {
 	proxy := httputil.NewSingleHostReverseProxy(aiEndpoint)
 	originalDirector := proxy.Director
 	proxy.Director = func(r *http.Request) {
+		fmt.Println(r.Header)
 		// request body can only be read once, so we need to save it in a buffer.
 		var bodyBuffer []byte
 		if r.Body != nil {
@@ -54,6 +56,14 @@ func HandleAll(c *gin.Context) {
 				return
 			}
 		}
+
+		reqBody := map[string]any{}
+		_ = json.Unmarshal(bodyBuffer, &reqBody)
+		if _, ok := reqBody["model"]; ok {
+			reqBody["model"] = model.Model
+		}
+
+		bodyBuffer, _ = json.Marshal(reqBody)
 
 		originalDirector(r)
 		if len(bodyBuffer) > 0 {
@@ -82,6 +92,18 @@ func HandleAll(c *gin.Context) {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
 		}
+	}
+
+	proxy.ModifyResponse = func(resp *http.Response) error {
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return err
+		}
+		resp.Body.Close()
+		resp.Header.Set("X-Proxy-Processed", "true")
+		resp.Body = io.NopCloser(bytes.NewBuffer(body))
+		resp.ContentLength = int64(len(body))
+		return nil
 	}
 
 	proxy.ServeHTTP(c.Writer, c.Request)

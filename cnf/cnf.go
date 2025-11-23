@@ -13,21 +13,66 @@ var (
 	DefaultModel *AIModel
 )
 
+type DefaultM struct {
+	Name string `toml:"name"`
+}
+
+func (dm *DefaultM) getPath() string {
+	homeDir, _ := os.UserHomeDir()
+	fcodeDir := filepath.Join(homeDir, FCodeDir)
+	os.MkdirAll(fcodeDir, os.ModePerm)
+	return filepath.Join(fcodeDir, DefaultModelFile)
+}
+
+func (dm *DefaultM) load() {
+	path := dm.getPath()
+	content, _ := os.ReadFile(path)
+	if len(content) > 0 {
+		_ = toml.Unmarshal(content, dm)
+	}
+}
+
+func (dm *DefaultM) Save(modelName string) {
+	dm.Name = modelName
+	path := dm.getPath()
+	content, err := toml.Marshal(dm)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	os.WriteFile(path, content, os.ModePerm)
+	dm.load()
+}
+
 func init() {
 	DefaultConf = &Conf{}
 	DefaultConf.load()
 	if len(DefaultConf.AIModels) > 0 {
-		DefaultModel = DefaultConf.AIModels[1]
+		dm := &DefaultM{}
+		dm.load()
+		for _, mm := range DefaultConf.AIModels {
+			if dm.Name == mm.Name || dm.Name == "" {
+				DefaultModel = mm
+				break
+			}
+		}
+
+		if DefaultModel == nil {
+			DefaultModel = DefaultConf.AIModels[0]
+		}
+	} else {
+		fmt.Println("no model added")
+		os.Exit(1)
 	}
 }
 
 const (
-	FCodeDir        = ".fcode"
-	FCodeConfigFile = "conf.toml"
-	FCodeApiKeyFile = "key.toml"
-	DefaultCursor   = "<CURSOR>"
-	DefaultPort     = 8123
-	ModelCtxKey     = "ai_model"
+	FCodeDir         = ".fcode"
+	FCodeConfigFile  = "conf.toml"
+	DefaultModelFile = "default.toml"
+	DefaultCursor    = "<CURSOR>"
+	DefaultPort      = 8123
+	ModelCtxKey      = "ai_model"
 )
 
 type AIModel struct {
