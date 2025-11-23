@@ -27,5 +27,5 @@ go install github.com/moqsien/fcode
 
 ## 开启本地服务
 ```bash
-fcode serve
+fcode serve &
 ```
