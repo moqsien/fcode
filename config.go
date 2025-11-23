@@ -20,13 +20,14 @@ func init() {
 }
 
 const (
-	FCodeDir        = ".fcode"
-	FCodeConfigFile = "conf.toml"
-	FCodeApiKeyFile = "key.toml"
-	IdeName         = "vim"
-	PluginVersion   = "0.2.1"
-	DefaultCursor   = "<CURSOR>"
-	DefaultPort     = 8123
+	FCodeDir              = ".fcode"
+	FCodeConfigFile       = "conf.toml"
+	FCodeApiKeyFile       = "key.toml"
+	FCodeCompletionPrompt = "!FCPR" + "EFIX!%s!FCSU" + "FFIX!%s!FCMI" + "DDLE!"
+	IdeName               = "vim"
+	PluginVersion         = "0.2.1"
+	DefaultCursor         = "<CURSOR>"
+	DefaultPort           = 8123
 )
 
 type Conf struct {

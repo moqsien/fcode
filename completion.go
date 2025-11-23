@@ -66,12 +66,14 @@ func handleCompletions(c *gin.Context, body *bytes.Buffer) {
 	prefix := strings.TrimSpace(result[0])
 	suffix := result[1]
 
-	prompt := fmt.Sprintf("!FCPREFIX!%s!FCSUFFIX!%s!FCMIDDLE!", prefix, suffix)
+	prompt := fmt.Sprintf(FCodeCompletionPrompt, prefix, suffix)
 	payload := map[string]any{
 		"inputs": prompt,
 	}
 
 	payloadJSON, _ := json.Marshal(payload)
+	p := "/Users/moqsien/projects/go/src/fcode/payload.json"
+	os.WriteFile(p, payloadJSON, os.ModePerm)
 
 	url := fmt.Sprintf("%s/%s?ide=%s&v=%s", completionURL, DefaultKey.APIKey, IdeName, PluginVersion)
 	resp, err := http.Post(url, "application/json", bytes.NewReader(payloadJSON))
@@ -88,6 +90,7 @@ func handleCompletions(c *gin.Context, body *bytes.Buffer) {
 	}
 
 	comp := strings.ReplaceAll(r.GeneratedText, "<.endoftext.>", "")
+	comp = strings.ReplaceAll(comp, `<|endoftext|>`, "")
 
 	lspAIResp := &Response{
 		[]Choice{
