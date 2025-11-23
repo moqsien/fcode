@@ -29,3 +29,11 @@ go install github.com/moqsien/fcode
 ```bash
 fcode stop && fcode serve>/dev/null 2>&1 &
 ```
+
+## Gallery
+- fitten code
+
+  ![fitten](https://github.com/moqsien/fcode/blob/main/imgs/lsp-ai_fitten.png)
+
+- chat
+  ![chat](https://github.com/moqsien/fcode/blob/main/imgs/lsp-ai_chat.png)
