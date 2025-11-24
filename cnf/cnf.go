@@ -89,6 +89,7 @@ type Conf struct {
 	Cursor   string     `toml:"cursor"`
 	Port     int        `toml:"port"`
 	AIModels []*AIModel `toml:"models"`
+	Debug    bool       `toml:"debug"`
 }
 
 func (c *Conf) GetPath() string {

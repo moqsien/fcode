@@ -15,7 +15,9 @@ var (
 )
 
 func Serve() {
-	gin.SetMode(gin.ReleaseMode)
+	if !cnf.DefaultConf.Debug {
+		gin.SetMode(gin.ReleaseMode)
+	}
 
 	r := gin.Default()
 
