@@ -27,3 +27,12 @@ model = 'Qwen/Qwen3-Coder-480B-A35B-Instruct'
 key = 'xxxxxx'
 username = ''
 password = ''
+
+[[models]]
+name = 'gemini'
+type = 'open_ai'
+api = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions'
+model = 'gemini-2.5-flash'
+key = 'xxxxxx'
+username = ''
+password = ''
