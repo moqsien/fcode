@@ -43,7 +43,7 @@ Use " [command] --help" for more information about a command.
 
 ## 安装
 ```bash
-go install github.com/moqsien/fcode
+go install github.com/moqsien/fcode@latest
 ```
 
 ## 开启本地服务
