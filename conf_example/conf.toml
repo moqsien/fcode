@@ -1,5 +1,6 @@
 cursor = '<CURSOR>'
 port = 8123
+proxy = "http://localhost:2023"
 
 [[models]]
 name = 'fitten_code'
@@ -29,6 +30,24 @@ username = ''
 password = ''
 
 [[models]]
+name = 'qwen2'
+type = 'open_ai'
+api = 'https://api-inference.modelscope.cn/v1/chat/completions'
+model = 'Qwen/Qwen2.5-Coder-32B-Instruct'
+key = 'xxxxxx'
+username = ''
+password = ''
+
+[[models]]
+name = 'qwen2.5'
+type = 'open_ai'
+api = 'https://api-inference.modelscope.cn/v1/chat/completions'
+model = 'Qwen/Qwen2.5-72B-Instruct'
+key = 'xxxxxx'
+username = ''
+password = ''
+
+[[models]]
 name = 'gemini'
 type = 'open_ai'
 api = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions'
@@ -36,3 +55,4 @@ model = 'gemini-2.5-flash'
 key = 'xxxxxx'
 username = ''
 password = ''
+use_proxy=true
