@@ -73,6 +73,7 @@ const (
 	DefaultCursor    = "<CURSOR>"
 	DefaultPort      = 8123
 	ModelCtxKey      = "ai_model"
+	ProxyCtxKey      = "proxy"
 )
 
 type AIModel struct {
@@ -83,6 +84,7 @@ type AIModel struct {
 	Key      string `toml:"key"`
 	Username string `toml:"username"`
 	Password string `toml:"password"`
+	UseProxy bool   `toml:"use_proxy"`
 }
 
 type Conf struct {
@@ -90,6 +92,7 @@ type Conf struct {
 	Port     int        `toml:"port"`
 	AIModels []*AIModel `toml:"models"`
 	Debug    bool       `toml:"debug"`
+	Proxy    string     `toml:"proxy"`
 }
 
 func (c *Conf) GetPath() string {
@@ -130,6 +133,10 @@ func (c *Conf) GetPort() string {
 		return fmt.Sprintf(":%d", c.Port)
 	}
 	return fmt.Sprintf(":%d", DefaultPort)
+}
+
+func (c *Conf) GetProxy() string {
+	return c.Proxy
 }
 
 func (c *Conf) SetApiKey(name, key string) {

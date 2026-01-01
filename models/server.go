@@ -25,6 +25,7 @@ func Serve() {
 
 	r.POST("/v1/completions", func(c *gin.Context) {
 		c.Set(cnf.ModelCtxKey, cnf.DefaultModel)
+		c.Set(cnf.ProxyCtxKey, cnf.DefaultConf.Proxy)
 
 		if strings.HasPrefix(cnf.DefaultModel.Name, "fitten_code") {
 			fitten.HandleAll(c)

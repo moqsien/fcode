@@ -43,9 +43,9 @@ func HandleAll(c *gin.Context) {
 		return
 	}
 
-	proxy := httputil.NewSingleHostReverseProxy(aiEndpoint)
-	originalDirector := proxy.Director
-	proxy.Director = func(r *http.Request) {
+	reverseProxy := httputil.NewSingleHostReverseProxy(aiEndpoint)
+	originalDirector := reverseProxy.Director
+	reverseProxy.Director = func(r *http.Request) {
 		fmt.Println(r.Header)
 		// request body can only be read once, so we need to save it in a buffer.
 		var bodyBuffer []byte
@@ -88,21 +88,31 @@ func HandleAll(c *gin.Context) {
 		r.Header.Set("Authorization", fmt.Sprintf("Bearer %s", model.Key))
 	}
 
-	proxy.Transport = roundTripperFunc(func(req *http.Request) (*http.Response, error) {
+	reverseProxy.Transport = roundTripperFunc(func(req *http.Request) (*http.Response, error) {
 		if proxyErr, ok := req.Context().Value(ReverseProxyErrCtxKey).(error); ok {
 			return nil, proxyErr
 		}
+		// 设置本地代理
+		localProxy := c.GetString(cnf.ProxyCtxKey)
+		if localProxy != "" {
+			proxyURL, _ := url.Parse(localProxy)
+			transport := &http.Transport{
+				Proxy: http.ProxyURL(proxyURL),
+			}
+			return transport.RoundTrip(req)
+		}
+
 		return http.DefaultTransport.RoundTrip(req)
 	})
 
-	proxy.ErrorHandler = func(w http.ResponseWriter, r *http.Request, err error) {
+	reverseProxy.ErrorHandler = func(w http.ResponseWriter, r *http.Request, err error) {
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
 		}
 	}
 
-	proxy.ModifyResponse = func(resp *http.Response) error {
+	reverseProxy.ModifyResponse = func(resp *http.Response) error {
 		body, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return err
@@ -116,5 +126,5 @@ func HandleAll(c *gin.Context) {
 		return nil
 	}
 
-	proxy.ServeHTTP(c.Writer, c.Request)
+	reverseProxy.ServeHTTP(c.Writer, c.Request)
 }
