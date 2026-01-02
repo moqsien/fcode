@@ -13,6 +13,8 @@ path-completion = true
 completion-timeout = 1000
 auto-format = true
 auto-info = true
+true-color=true
+soft-wrap.enable = true
 
 [editor.file-picker]
 git-ignore = false
@@ -41,7 +43,7 @@ mode.select = "SELECT"
 '[' = ']'
 '"' = '"'
 '`' = '`'
-'<' = '>'
+# '<' = '>'
 
 [editor.auto-save]
 focus-lost = true
@@ -65,27 +67,40 @@ layout = ["diagnostics", "spacer", "line-numbers", "spacer", "diff"]
 tab = "move_parent_node_end"
 S-tab = "move_parent_node_start"
 C-s = ":w"
+C-q = ":q"
 C-p = ':sh echo "$(pwd)/%{buffer_name}" | pbcopy'
 C-b = ":sh git blame -L %{cursor_line},%{cursor_line} %{buffer_name}"
-C-c = ":sh git blame -L %{cursor_line},%{cursor_line} %{buffer_name} | awk '{print $1}' | pbcopy"
 C-x = ":bc!"
 C-i = "code_action"
 H = "goto_next_paragraph"
 L = "goto_prev_paragraph"
-G = [
+J = [
   "move_next_sub_word_end",
   "move_prev_sub_word_start"
 ]
+K = [
+  "move_next_word_end",
+  "move_prev_word_start"
+]
 # use lazygit
-C-l = [
+C-g = [
   ':insert-output lazygit',
   ':redraw',
   "undo"
 ]
-A-h = "@maf<A-;>;"
-A-l = "@maf;"
-A-j = "@mam<A-;>;"
-A-k = "@mam;"
+A-j = "@maf<A-;>;"
+A-k = "@maf;"
+A-m = "@ma{<A-;>;"
+A-l = "@ma{;"
+A-n = "@ma];"
+A-y = "@mi]"
+C-f = "@mi{"
+C-v = "@mi`"
+C-a = [
+  "select_all",
+  "select_regex"
+]
+G = "keep_primary_selection"
 
 [keys.normal."space"]
 h = [
@@ -96,8 +111,9 @@ h = [
   ":bc!",
   ":vsplit-new",
   ":set-language markdown",
-  ":insert-output echo '!C 分析一下下面的代码变更有什么bug: '",
+  ":insert-output echo '!C '",
   ":append-output default_branch=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@') && git diff $default_branch...HEAD",
+  ":append-output echo '请分析一下上面的新增代码有什么问题。'",
   "select_all",
   "yank",
   ":buffer-close!",
@@ -128,8 +144,9 @@ m = [
   ":e ~/tmp/chat-ai.md",
   "select_all",
   "delete_selection",
-  ":insert-output echo '!C 分析一下下面的代码变更有什么bug: '",
+  ":insert-output echo '!C '",
   ":clipboard-paste-after",
+  ":append-output echo '请分析一下上面的新增代码有什么问题。'",
   ":w"
 ]
 n = [
@@ -137,7 +154,19 @@ n = [
   ":e ~/tmp/chat-ai.md",
   "select_all",
   "delete_selection",
-  ":insert-output echo '!C 分析一下下面的代码: '",
+  ":insert-output echo '!C 分析一下下面的代码的功能以及存在的问题: \n'",
+  "goto_file_end",
+  ":clipboard-paste-after",
+  ":w"
+]
+M = [
+  ":e ~/.config/helix/cmd.md",
+  "goto_file_end"
+]
+N = [
+  ":clipboard-yank",
+  ":e ~/tmp/chat-ai.md",
+  "goto_file_end",
   ":clipboard-paste-after",
   ":w"
 ]
@@ -160,9 +189,7 @@ C-x = ":bc!"
 C-i = "code_action"
 C-f = "goto_next_paragraph"
 C-g = "goto_prev_paragraph"
+'j'	= {k='normal_mode','j'={'k'=[':insert-output /bin/echo -n j','move_char_right','normal_mode']}}
 
 [keys.select]
-tab = "extend_parent_node_end"
-S-tab = "extend_parent_node_start"
 C-i = "code_action"
-

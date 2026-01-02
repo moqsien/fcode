@@ -5,7 +5,7 @@ inherits = 'everforest_dark'
 # inherits = 'dark_high_contrast'
 # inherits = 'vim_dark_high_contrast'
 "ui.background" = {}
-"ui.selection" = { fg = "black", bg = "#3CB371" }
+"ui.selection" = { fg = "#B8BB26", bg = "#3C3836" }
 
 # DIAGNOSTICS
 # For brevity: All blends here are a blend between bg1 and the fg value with factor of 0.15

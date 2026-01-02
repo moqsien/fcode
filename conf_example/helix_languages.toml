@@ -1,17 +1,8 @@
 ##############################
 ## Configuration for lsp-ai ##
 ##############################
-
 [language-server.lsp-ai]
 command = "lsp-ai"
-
-[language-server.markdown-oxide]
-command = "markdown-oxide"
-args = ["server"]
-
-[language-server.protols]
-command = "protols"
-args = ["--include-paths", "proto/src"]
 
 [language-server.lsp-ai.config.memory]
 file_store = { }
@@ -22,22 +13,76 @@ chat_endpoint = "http://127.0.0.1:8123/v1/completions"
 model =  "LongCat-Flash-Chat"
 auth_token_env_var_name = "LONGCAT_API_KEY"
 
+# Completion
 [language-server.lsp-ai.config.completion]
 model = "model1"
 
 [language-server.lsp-ai.config.completion.parameters]
-max_tokens = 64
-max_context = 1024
+max_tokens = 4096
+max_context = 4096
 
-## Configure the messages per your needs
 [[language-server.lsp-ai.config.completion.parameters.messages]]
 role = "system"
-content = "Instructions:\n- You are an AI programming assistant.\n- Given a piece of code with the cursor location marked by \"<CURSOR>\", replace \"<CURSOR>\" with the correct code or comment.\n- First, think step-by-step.\n- Describe your plan for what to build in pseudocode, written out in great detail.\n- Then output the code replacing the \"<CURSOR>\"\n- Ensure that your completion fits within the language context of the provided code snippet (e.g., Python, JavaScript, Rust).\n\nRules:\n- Only respond with code or comments.\n- Only replace \"<CURSOR>\"; do not include any previously written code.\n- Never include \"<CURSOR>\" in your response\n- If the cursor is within a comment, complete the comment meaningfully.\n- Handle ambiguous cases by providing the most contextually appropriate completion.\n- Be consistent with your responses."
+content = "你是一个代码助手，请尽最大努力结合我提供的代码上下文，并根据当前光标所在的位置生成合理的代码。具体要求如下：\n 1. 不要生成非代码的文本，并且不需要```xxxx```这样的引号，我需要的是直接能够粘贴在代码中的文本。\n 2. 如果有注释，注释必须规范且使用英文。\n 3. 提供给你的代码上下文中的<CURSOR>就是光标所在位置的标记，不要弄错了！"
 
 [[language-server.lsp-ai.config.completion.parameters.messages]]
-  role = "user"
-  content = "Complete the code at the cursor. Use the surrounding file context and project context as necessary. Replace <CURSOR> with the completed text. Current code: {CODE}\nProject context: {CONTEXT}"
+role = "user"
+content = "{CODE}"
 
+# Refactor code
+[[language-server.lsp-ai.config.actions]]
+model = "model1"
+action_display_name = "Refactor"
+
+[language-server.lsp-ai.config.actions.parameters]
+max_tokens = 4096
+max_context = 4096
+
+[[language-server.lsp-ai.config.actions.parameters.messages]]
+role = "system"
+content = "你是一个代码助手，请尽最大努力结合我提供的代码，进行分析并提出合理的重构方案。重构的要求如下：\n 1. 只提供重构代码即可，不需要提供任何文字描述，并且不需要```xxxx```这样的引号，我希望你返回一个直接可以放到代码中去且不会报错的文本。\n 2. 如果代码原来有注释，则根据重构之后的代码的情况加上对应的注释，如果原来的代码没有注释，则生成的代码不需要加注释！"
+
+[[language-server.lsp-ai.config.actions.parameters.messages]]
+role = "user"
+content = "{SELECTED_TEXT}"
+
+
+# Explain code
+[[language-server.lsp-ai.config.actions]]
+model = "model1"
+action_display_name = "Explain"
+
+[language-server.lsp-ai.config.actions.parameters]
+max_tokens = 4096
+max_context = 4096
+
+[[language-server.lsp-ai.config.actions.parameters.messages]]
+role = "system"
+content = "你是一个代码助手，需要对我提供的代码进行专业的分析，然后生成分析结果。分析结果的格式要求如下：\n 1. 你需要在我提供的代码中的每个代码块的上方，以注释的方式提供该代码块的解读信息；\n  2. 绝对不要使用```xxxx```这样的引号对任何代码进行包裹，我希望你返回一个直接可以放到代码中去且不会报错的文本！\n 3. 不要丢失或覆盖提供给你的代码！\n 4. 只需要对逻辑复杂的代码块做出解释。"
+
+[[language-server.lsp-ai.config.actions.parameters.messages]]
+role = "user"
+content = "{SELECTED_TEXT}"
+
+
+# Modify code
+[[language-server.lsp-ai.config.actions]]
+model = "model1"
+action_display_name = "Modify"
+
+[language-server.lsp-ai.config.actions.parameters]
+max_tokens = 4096
+max_context = 4096
+
+[[language-server.lsp-ai.config.actions.parameters.messages]]
+role = "system"
+content = "你是一个代码助手，需要按照我的要求，对我提供的代码进行修改。具体要求如下：\n 1. 我的修改要求的描述放在代码上方或者下方的注释中。\n  2. 绝对不要使用```xxxx```这样的引号对代码进行包裹，我希望你返回一个直接可以放到代码中去且不会报错的文本！\n 3. 修改之后的代码不需要注释。"
+
+[[language-server.lsp-ai.config.actions.parameters.messages]]
+role = "user"
+content = "{SELECTED_TEXT}"
+
+# Chat in editor
 [[language-server.lsp-ai.config.chat]]
 trigger = "!C"
 action_display_name = "Chat"
@@ -45,8 +90,35 @@ model = "model1"
 
 [language-server.lsp-ai.config.chat.parameters]
 max_context = 4096
-max_tokens = 1024
-system = "You are a code assistant chatbot. The user will ask you for assistance coding and you will do you best to answer succinctly and accurately"
+max_tokens = 4096
+
+[[language-server.lsp-ai.config.chat.parameters.messages]]
+role = "system"
+content= "你是一个代码助手，能够根据我提出的要求，对代码或者代码变更进行非常细致且专业的分析。要求如下：\n 1. 如果代码是git diff结果，请细致分析，并提供代码变更可能存在哪些问题，并给出合理的解决方案；\n 2. 如果我是在请你根据代码生成swagger文档，那么生成的swagger文档必须符合openapi 2.0规范，必须使用英文，同时，swagger文档不要有example字段，也不要生成components。"
+
+[[language]]
+name = "rust"
+formatter = { command = "rustfmt" }
+
+[[language]]
+name = "cpp"
+formatter = { command = "clang-format" }
+
+[[language]]
+name = "python"
+formatter = { command = "black", args = ["-"] } 
+
+[[language]]
+name = "go"
+language-servers = [ "gopls", "lsp-ai" ]
+auto-format = true
+formatter = ["gofmt"]
+
+[[language]]
+name = "markdown"
+auto-format = true
+formatter = { command = "dprint", args = ["fmt", "--stdin", "md"] }
+language-servers = ["marksman","lsp-ai"]
 
 ### yaml
 [language-server.yaml-language-server]
@@ -61,30 +133,8 @@ validation = true
 "https://json.schemastore.org/github-workflow.json" = ".github/workflows/*.{yml,yaml}"
 "https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible-tasks.json" = "roles/{tasks,handlers}/*.{yml,yaml}"
 
-
-#################################
-## Configuration for languages ##
-#################################
-
-[[language]]
-name = "go"
-language-servers = ["gopls", "lsp-ai"]
-
-[[language]]
-name = "toml"
-language-servers = ["lsp-ai"]
-
 [[language]]
 name = "yaml"
 file-types = ["yaml", "yml"]
+auto-format = true
 language-servers = ["yaml-language-server", "lsp-ai"]
-
-[[language]]
-name = "markdown"
-file-types = ["md", "markdown"]
-language-servers = ["markdown-oxide", "lsp-ai"]
-
-[[language]]
-name = "protobuf"
-language-servers = ["protols", "lsp-ai"]
-
