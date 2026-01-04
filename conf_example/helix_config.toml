@@ -1,3 +1,4 @@
+
 theme = "mydark"
 
 [editor]
@@ -15,6 +16,7 @@ auto-format = true
 auto-info = true
 true-color=true
 soft-wrap.enable = true
+clipboard-provider = "pasteboard"
 
 [editor.file-picker]
 git-ignore = false
@@ -68,8 +70,8 @@ tab = "move_parent_node_end"
 S-tab = "move_parent_node_start"
 C-s = ":w"
 C-q = ":q"
-C-p = ':sh echo "$(pwd)/%{buffer_name}" | pbcopy'
-C-b = ":sh git blame -L %{cursor_line},%{cursor_line} %{buffer_name}"
+# C-p = ':sh echo "$(pwd)/%{buffer_name}" | pbcopy'
+C-l = ":sh git blame -L %{cursor_line},%{cursor_line} %{buffer_name}"
 C-x = ":bc!"
 C-i = "code_action"
 H = "goto_next_paragraph"
@@ -187,8 +189,8 @@ C-b = ":sh git blame -L %{cursor_line},%{cursor_line} %{buffer_name}"
 C-c = ":sh git blame -L %{cursor_line},%{cursor_line} %{buffer_name} | awk '{print $1}' | pbcopy"
 C-x = ":bc!"
 C-i = "code_action"
-C-f = "goto_next_paragraph"
-C-g = "goto_prev_paragraph"
+# C-f = "goto_next_paragraph"
+# C-g = "goto_prev_paragraph"
 'j'	= {k='normal_mode','j'={'k'=[':insert-output /bin/echo -n j','move_char_right','normal_mode']}}
 
 [keys.select]
