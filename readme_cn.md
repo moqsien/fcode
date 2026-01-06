@@ -48,6 +48,8 @@ Use " [command] --help" for more information about a command.
 ## 安装
 ```bash
 go install github.com/gvcgo/fcode@latest
+# 我个人更喜欢为helix设置命令别名，这样每次打开helix都能重启fcode:
+# alias hx="fcode stop && fcode serve>/dev/null 2>&1 & ; hx"
 ```
 
 ## 开启本地服务

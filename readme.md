@@ -55,6 +55,8 @@ go install github.com/gvcgo/fcode@latest
 ## Start the local service
 ```bash
 fcode stop && fcode serve>/dev/null 2>&1 &
+# I prefer alias for helix:
+# alias hx="fcode stop && fcode serve>/dev/null 2>&1 & ; hx"
 ```
 
 ## Gallery
